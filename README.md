@@ -16,8 +16,9 @@ make run
 
 1. Generate Signed URL for Retrieving an Object
 
+| Title         | Description                                                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | URL           | /gcs                                                                                                |
-| ------------- | --------------------------------------------------------------------------------------------------- |
 | Method        | POST                                                                                                |
 | Request Body  | <pre>{<br> "bucket": "your-bucket-name",<br> "object": "your-object-name"<br>}</pre>                |
 | Response Body | <pre>{<br> "url": "https://storage.googleapis.com/your-bucket-name/your-object-name?..."<br>}</pre> |
