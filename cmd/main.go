@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"cloud.google.com/go/storage"
 	"github.com/boomauakim/gcs-signed-url-go/internal/gcs"
@@ -38,8 +39,9 @@ func main() {
 		panic(fmt.Errorf("storage.NewClient: %v", err))
 	}
 	defer client.Close()
+	buckerHandler := client.Bucket(os.Getenv("GCS_BUCKET_NAME"))
 
-	gcsService := gcs.NewService(client)
+	gcsService := gcs.NewService(buckerHandler)
 	gcs.NewHandler(app, gcsService)
 
 	app.Listen(":3000")

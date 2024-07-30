@@ -2,7 +2,6 @@ package gcs
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,27 +9,31 @@ import (
 	"cloud.google.com/go/storage"
 )
 
+type BucketHandler interface {
+	SignedURL(object string, opts *storage.SignedURLOptions) (string, error)
+}
+
 type Service interface {
-	GetObjectSignedURL(bucket string, object string) (url string, err error)
+	GetObjectSignedURL(object string) (url string, err error)
 	GetUploadObjectSignedURL() (path string, url string, err error)
 }
 
 type service struct {
-	client *storage.Client
+	BucketHandler BucketHandler
 }
 
-func NewService(client *storage.Client) Service {
+func NewService(client BucketHandler) Service {
 	return &service{client}
 }
 
-func (s service) GetObjectSignedURL(bucket string, object string) (signedURL string, err error) {
+func (s service) GetObjectSignedURL(object string) (signedURL string, err error) {
 	opts := &storage.SignedURLOptions{
 		Scheme:  storage.SigningSchemeV4,
 		Method:  "GET",
 		Expires: time.Now().Add(15 * time.Minute),
 	}
 
-	signedURL, err = s.client.Bucket(bucket).SignedURL(object, opts)
+	signedURL, err = s.BucketHandler.SignedURL(object, opts)
 	if err != nil {
 		return "", fmt.Errorf("storage.SignedURL: %v", err)
 	}
@@ -51,7 +54,7 @@ func (s service) GetUploadObjectSignedURL() (path string, signedURL string, err 
 	filename := uuid.New().String()
 	path = fmt.Sprintf("temp/%s", filename)
 
-	signedURL, err = s.client.Bucket(os.Getenv("GCS_BUCKET_NAME")).SignedURL(path, opts)
+	signedURL, err = s.BucketHandler.SignedURL(path, opts)
 	if err != nil {
 		return "", "", fmt.Errorf("storage.SignedURL: %v", err)
 	}

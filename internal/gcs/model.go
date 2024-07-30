@@ -1,8 +1,7 @@
 package gcs
 
 type GetObjectSignedURLBody struct {
-	Bucket string `json:"bucket"`
-	Object string `json:"object"`
+	Object string `json:"object" validate:"required"`
 }
 
 type GetObjectSignedURLResponse struct {

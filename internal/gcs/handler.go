@@ -1,8 +1,11 @@
 package gcs
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
+
+var validate = validator.New()
 
 type Handler interface {
 	GetObjectSignedURL(c *fiber.Ctx) (err error)
@@ -29,7 +32,11 @@ func (h handler) GetObjectSignedURL(c *fiber.Ctx) (err error) {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	url, err := h.service.GetObjectSignedURL(body.Bucket, body.Object)
+	if err = validate.Struct(body); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	url, err := h.service.GetObjectSignedURL(body.Object)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
