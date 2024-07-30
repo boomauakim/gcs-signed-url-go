@@ -14,36 +14,18 @@ make run
 
 ## API Endpoints
 
-Generate Signed URL for Retrieving an Object
+1. Generate Signed URL for Retrieving an Object
 
-- URL: `/gcs`
-- Method: `POST`
-- Request Body:
+| URL           | /gcs                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------- |
+| Method        | POST                                                                                                |
+| Request Body  | <pre>{<br> "bucket": "your-bucket-name",<br> "object": "your-object-name"<br>}</pre>                |
+| Response Body | <pre>{<br> "url": "https://storage.googleapis.com/your-bucket-name/your-object-name?..."<br>}</pre> |
 
-```
-{
-  "bucket": "your-bucket-name,
-  "object": "your-object-name"
-}
-```
+2. Generate a Signed URL for Uploading an Object
 
-- Response:
-
-```
-{
-  "url": "https://storage.googleapis.com/your-bucket-name/your-object-name?..."
-}
-```
-
-Generate a Signed URL for Uploading an Object
-
-- URL: `/gcs/uploads`
-- Method: `GET`
-- Response:
-
-```
-{
-  "path": "temp/random-object-name",
-  "url": "https://storage.googleapis.com/your-bucket-name/temp/random-object-name?..."
-}
-```
+| Title         | Description                                                                                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| URL           | /gcs/uploads                                                                                                                                      |
+| Method        | GET                                                                                                                                               |
+| Response Body | <pre>{<br> "path": "temp/random-object-name",<br> "url": "https://storage.googleapis.com/your-bucket-name/temp/random-object-name?..."<br>}</pre> |
