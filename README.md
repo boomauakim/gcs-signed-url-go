@@ -1,6 +1,6 @@
 # gcs-signed-url-go
 
-This repository is created as a proof of concept for generating signed URLs for Google Cloud Storage (GCS).
+This repository was created as a proof of concept for generating signed URLs for Google Cloud Storage (GCS).
 
 ## Usage
 
